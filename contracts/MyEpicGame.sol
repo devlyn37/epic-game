@@ -9,6 +9,8 @@ import "./libraries/Base64.sol";
 
 import "hardhat/console.sol";
 
+/// @title A game where players mint characters and team up to defeat the boss
+/// @author Devlyn Dorfer (completing buildspace project)
 contract MyEpicGame is ERC721 {
     struct CharacterAttributes {
         uint256 characterIndex;
@@ -31,18 +33,11 @@ contract MyEpicGame is ERC721 {
 
     BigBoss public bigBoss;
 
-    // The tokenId is the NFTs unique identifier, it's just a number that goes
-    // 0, 1, 2, 3, etc.
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
     CharacterAttributes[] defaultCharacters;
-
-    // We create a mapping from the nft's tokenId => that NFTs attributes.
     mapping(uint256 => CharacterAttributes) public nftHolderAttributes;
-
-    // A mapping from an address => the NFTs tokenId. Gives me an ez way
-    // to store the owner of the NFT and reference it later.
     mapping(address => uint256) public nftHolders;
 
     event CharacterNFTMinted(
@@ -52,6 +47,16 @@ contract MyEpicGame is ERC721 {
     );
     event AttackComplete(uint256 newBossHp, uint256 newPlayerHp);
 
+    /// @param characterNames the names of the player characters that may be minted for the game
+    /// @param characterImageURIs the images for each of the player characters
+    /// @param characterHp the hp stat of each player character
+    /// @param characterAttackDmg the attack stat of each player character
+    /// @param characterPp the Power points of each player character
+    /// @param bossName the name of the boss character
+    /// @param bossImageURI the boss character's image
+    /// @param bossHp the hp stat of the boss character
+    /// @param bossAttackDamage the attack stat of the boss character
+    /// @dev increments the token id such that the first mint is token #1
     constructor(
         string[] memory characterNames,
         string[] memory characterImageURIs,
@@ -97,6 +102,8 @@ contract MyEpicGame is ERC721 {
         _tokenIds.increment();
     }
 
+    /// @notice the mint function for player characters
+    /// @param _characterIndex a uint specifying which of the player characters to mint
     function mintCharacterNFT(uint256 _characterIndex) external {
         // (starts at 1 since we incremented in the constructor).
         uint256 newItemId = _tokenIds.current();
@@ -127,6 +134,7 @@ contract MyEpicGame is ERC721 {
         emit CharacterNFTMinted(msg.sender, newItemId, _characterIndex);
     }
 
+    /// @param _tokenId id of desired token
     function tokenURI(uint256 _tokenId)
         public
         view
@@ -178,6 +186,7 @@ contract MyEpicGame is ERC721 {
         return output;
     }
 
+    /// @notice attack the boss with player character, both recieving damage according to stats
     function attackBoss() public {
         uint256 nftTokenIdOfPlayer = nftHolders[msg.sender];
         CharacterAttributes storage player = nftHolderAttributes[
@@ -217,6 +226,7 @@ contract MyEpicGame is ERC721 {
         emit AttackComplete(bigBoss.hp, player.hp);
     }
 
+    /// @return character attributes for the sender if they hold a player an empty struct otherwise.
     function checkIfUserHasNFT()
         public
         view
@@ -231,6 +241,7 @@ contract MyEpicGame is ERC721 {
         }
     }
 
+    /// @return each of the default characters available for minting
     function getAllDefaultCharacters()
         public
         view
@@ -239,6 +250,7 @@ contract MyEpicGame is ERC721 {
         return defaultCharacters;
     }
 
+    /// @return the big boss's information
     function getBigBoss() public view returns (BigBoss memory) {
         return bigBoss;
     }
