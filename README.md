@@ -1,15 +1,19 @@
-# Basic Sample Hardhat Project
+# Epic Game
+The game allows players to mint one of three characters and team up with other players to defeat a boss. Players may attack the boss, dealing and taking damage. Character attributes (attack, hp, etc...) are stored on chain and can be [viewed on opensea](https://testnets.opensea.io/assets/0xf2f7af84730d54ebf3bee12b18a5a410ee55ba1c/2).
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+Contract based on a Buildspace project 🦄.
 
-Try running some of the following tasks:
+It does a couple things: 
+- mints player NFTs
+- Allows players to attack the boss character 🏹
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+The theme of the project is easily configurable within the [deploy file](./scripts/deploy.js). I chose gen 4 pokemon in anticipation of a new game release.
+
+It's deployed on Rinkeby.
+
+Play the game [here](https://nft-game-starter-project.devlyn37.repl.co)
+
+[Client Repo](https://github.com/devlyn37/epic-game-web)
+
+
+
